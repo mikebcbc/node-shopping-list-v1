@@ -4,7 +4,7 @@ const router = express.Router();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
-const {ShoppingList} = require('./models');
+const {ShoppingList, Recipes} = require('./models');
 
 const jsonParser = bodyParser.json();
 const app = express();
@@ -21,8 +21,16 @@ ShoppingList.create('peppers', 4);
 // when the root of this router is called with GET, return
 // all current ShoppingList items
 app.get('/shopping-list', (req, res) => {
-  res.json(ShoppingList.get());
+  res.json(ShoppingList.get()); // serializing what comes back from the get method on the ShoppingList model.
 });
+
+Recipes.create('chocolate milk', ['cocoa', 'milk', 'sugar']);
+Recipes.create('pie crust', ['flour', 'sugar', 'milk', 'butter']);
+Recipes.create('iced tea', ['tea leaf', 'water', 'sugar', 'ice']);
+
+app.get('/recipes', (req, res) => {
+	res.json(Recipes.get());
+})
 
 app.listen(process.env.PORT || 8080, () => {
   console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
